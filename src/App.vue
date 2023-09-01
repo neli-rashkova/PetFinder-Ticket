@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div>Hey</div>
+  <div class="w-screen h-screen bg-lime-100">
+    <PetFinder />
+  </div>
 </template>
+
+<script setup lang="ts">
+import PetFinder from "@/components/PetFinder/index.vue";
+</script>
