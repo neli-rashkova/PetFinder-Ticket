@@ -10,6 +10,7 @@
           v-model="location"
           aria-required="true"
         />
+
         <select
           aria-required="true"
           v-model="selected"
@@ -22,18 +23,11 @@
           <option>Bird</option>
         </select>
 
-        <div class="w-full h-1/4 flex justify-evenly gap-3 py-1">
-          <button
-            class="w-1/2 bg-orange-500 rounded uppercase font-semibold border border-black"
-          >
-            Clear
-          </button>
-          <button
-            class="w-1/2 bg-orange-500 rounded uppercase font-semibold border border-black"
-          >
-            Search
-          </button>
+        <div class="w-full h-1/4 flex justify-evenly py-1">
+          <SmallButton label="Clear" @handleEvent="clear" />
+          <SmallButton label="Search" @handleEvent="submit" />
         </div>
+        <div>{{ location }}</div>
       </div>
     </div>
   </div>
@@ -41,7 +35,14 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import SmallButton from "../Buttons/SmallButton.vue";
 
-const location = ref<number>();
+const location = ref<number | undefined>(undefined);
 const selected = ref("");
+
+function submit() {}
+
+function clear() {
+  location.value = undefined;
+}
 </script>
