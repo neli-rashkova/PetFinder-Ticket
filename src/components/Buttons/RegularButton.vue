@@ -13,6 +13,8 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from "@iconify/vue";
+
 const props = defineProps({
   label: { type: String, required: true },
 });
