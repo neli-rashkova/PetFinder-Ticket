@@ -1,9 +1,29 @@
 import { defineStore } from "pinia";
 
-export const usePetDataStore = defineStore("PetDataStore", {
-  state: () => {
-    return {
-      pets: pets,
-    };
-  },
+interface Pet {
+  age: string;
+  gender: string;
+  name: string;
+  breed: string;
+  distance: string | null;
+  photo: Photo;
+}
+
+interface Photo {
+  full: string;
+  large: string;
+  medium: string;
+  small: string;
+}
+
+export type PetInfo = {
+  pets: Pet[];
+};
+
+export const usePetDataStore = defineStore({
+  id: "PetDataStore",
+  state: () =>
+    ({
+      pets: [],
+    } as PetInfo),
 });
