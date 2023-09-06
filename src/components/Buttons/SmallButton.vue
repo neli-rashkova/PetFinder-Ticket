@@ -1,6 +1,6 @@
 <template>
   <button
-    class="w-2/5 bg-orange-500 rounded uppercase font-semibold tracking-wide border border-black active:bg-orange-300"
+    class="w-1/2 h-[20%] bg-orange-500 rounded uppercase font-semibold tracking-wide border border-black text-lg active:bg-orange-300 md:hidden"
     @click="btnClicked"
   >
     {{ props.label }}
