@@ -56,7 +56,7 @@ const petFinderKey = "MoeWtb2AXMkm0UpB9CZqsSN4OYVc9OdulnDB9h6AF4jZses8Gd";
 const petFinderSecret = "m35MTTkGg68TTq5S2FnKToUOdbQJIyLr508zrR9p";
 const httpToken = "https://api.petfinder.com/v2/oauth2/token";
 const key = `grant_type=client_credentials&client_id=${petFinderKey}&client_secret=${petFinderSecret}`;
-const token = ref(0);
+const token = ref("");
 
 async function getPets() {
   try {
@@ -102,21 +102,16 @@ watch(pageCount, () => {
   getPets();
 });
 
-watch(location, (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    store.$reset();
-    count.pageCount = 1;
-    count.totalCount = 0;
+watch(
+  [location, selected],
+  ([newLocation, newSelected], [prevLocation, prevSelected]) => {
+    if (newLocation !== prevLocation || newSelected !== prevSelected) {
+      store.$reset();
+      count.pageCount = 1;
+      count.totalCount = 0;
+    }
   }
-});
-
-watch(selected, (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    store.$reset();
-    count.pageCount = 1;
-    count.totalCount = 0;
-  }
-});
+);
 
 function clear() {
   location.value = undefined;
