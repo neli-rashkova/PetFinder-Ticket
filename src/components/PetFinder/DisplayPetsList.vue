@@ -36,7 +36,7 @@
 import PetCard from "./PetCard.vue";
 import { usePetDataStore } from "../../stores/PetDataStore";
 import { usePageCountStore } from "../../stores/PageCountStore";
-import { computed, onUpdated } from "vue";
+import { computed } from "vue";
 
 const store = usePetDataStore();
 const count = usePageCountStore();
@@ -50,10 +50,5 @@ const itemsOnCurrentPage = computed(() => {
       return el;
     }
   });
-});
-
-/* delete later*/
-onUpdated(() => {
-  console.log("T", store.pets);
 });
 </script>
