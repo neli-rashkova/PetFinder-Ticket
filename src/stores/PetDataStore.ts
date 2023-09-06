@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 interface Pet {
+  id: number;
   age: string;
   gender: string;
   name: string;
