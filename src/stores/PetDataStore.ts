@@ -5,7 +5,7 @@ interface Pet {
   gender: string;
   name: string;
   breed: string;
-  distance: string | null;
+  distance: number;
   photo: Photo;
 }
 
