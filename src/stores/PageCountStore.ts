@@ -4,13 +4,18 @@ export const usePageCountStore = defineStore({
   id: "PageCountStore",
   state: () => ({
     pageCount: 1,
+    totalCount: 0,
   }),
   actions: {
     increment() {
-      this.pageCount++;
+      if (this.pageCount < this.totalCount) {
+        this.pageCount++;
+      }
     },
     decrement() {
-      this.pageCount--;
+      if (this.pageCount > 1) {
+        this.pageCount--;
+      }
     },
   },
 });
