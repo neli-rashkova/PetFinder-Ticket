@@ -1,14 +1,14 @@
 <template>
   <button
     @click="btnClicked"
-    class="hidden md:w-[15%] md:h-full md:bg-orange-500 md:flex md:items-center md:justify-between md:px-[6px] md:text-white xl:justify-evenly"
+    class="hidden md:w-1/2 md:h-full md:bg-orange-500 md:flex md:items-center md:justify-between md:px-[6px] md:text-white xl:justify-evenly md:text-xs"
   >
     <Icon
       icon="foundation:magnifying-glass"
       color="white"
       :horizontalFlip="true"
     />
-    <span>{{ props.label }}</span>
+    <span class="text-xs">{{ props.label }}</span>
   </button>
 </template>
 
