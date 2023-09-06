@@ -28,48 +28,60 @@
           <SmallButton label="Search" @handleEvent="getPets" />
         </div>
 
-        <RegularButton label="Search" @handleEvent="getPets" />
-      </div>
-      <div v-for="(pet, index) in store.pets" :key="index">
-        <img :src="pet.photo?.medium" :alt="pet.name" />
-        <span>Name: {{ pet.name }}</span>
-        <span>Age: {{ pet.age }}</span>
-        <span>Breed: {{ pet.breed }}</span>
-        <span>Gender: {{ pet.gender }}</span>
+        <div class="hidden md:w-[15%] md:h-full md:flex gap-1">
+          <RegularButton label="Search" @handleEvent="getPets" />
+          <ClearButton label="Clear" @handle-event="clear" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
+import { storeToRefs } from "pinia";
+import axios from "axios";
 import { usePetDataStore } from "../../stores/PetDataStore";
+import { usePageCountStore } from "../../stores/PageCountStore";
 import SmallButton from "../Buttons/SmallButton.vue";
 import RegularButton from "../Buttons/RegularButton.vue";
+import ClearButton from "../Buttons/ClearButton.vue";
 
 const location = ref<number | undefined>(undefined);
 const selected = ref("");
 const store = usePetDataStore();
-const token = ref(
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJNb2VXdGIyQVhNa20wVXBCOUNacXNTTjRPWVZjOU9kdWxuREI5aDZBRjRqWnNlczhHZCIsImp0aSI6ImQ3OWE4ZTU2MDExNmFkOGUyYjEwMjc2Y2FhNWM5YWM5YTMwZjJmM2U2ZGVmMjVmMjZiYWY4YjhlMzI2YjhhZWUzNTU3ZmFiYzA1MzJhZGI5IiwiaWF0IjoxNjkzOTE5MjQ5LCJuYmYiOjE2OTM5MTkyNDksImV4cCI6MTY5MzkyMjg0OSwic3ViIjoiIiwic2NvcGVzIjpbXX0.DzaWVjG19a__J9vyVO2HKOyk_J2RPeVIy4BiYe_kXhMW6CKeRG-XgESuQn6r4WGNJjN5eKjuNavlHsVIeza9or3jH7JvCVFmUb0Q3CNeuUAkk5gi9ykAGmEorOL9EQ-Q9c2IdRonfqilciTR4A7ZsniIegZFsUBMyFH9VJ5yFTzi-R7VxENAZNXiuugXpCSnuINYASFihVNqSkhHg-ZyWtRF-JxmEHeKNj3BRiV55jXe5IafLL3IpnxB-65wQl-ycqieEaXJxBbi9vHj6G16SV041zvoHyV4f8GGFGEIRWmw7U39dgRvTxUOLllUg51gyzDuqQDy6wgASwgscYEXNw"
-);
-const BearerToken = `Bearer ${token.value}`;
-
-const options = {
-  method: "GET",
-  headers: {
-    Authorization: BearerToken,
-  },
-};
+const count = usePageCountStore();
+const { pageCount } = storeToRefs(count);
+const petFinderKey = "MoeWtb2AXMkm0UpB9CZqsSN4OYVc9OdulnDB9h6AF4jZses8Gd";
+const petFinderSecret = "m35MTTkGg68TTq5S2FnKToUOdbQJIyLr508zrR9p";
+const httpToken = "https://api.petfinder.com/v2/oauth2/token";
+const key = `grant_type=client_credentials&client_id=${petFinderKey}&client_secret=${petFinderSecret}`;
+const token = ref(0);
 
 async function getPets() {
   try {
-    const res = await fetch(
-      "https://api.petfinder.com/v2/animals?type=dog&page=2",
-      options
-    );
-    const pets = await res.json();
-    let temp = pets.animals;
+    const res = await axios.post(httpToken, key);
+    token.value = res.data.access_token;
+    getPetData();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const petDataUrl = computed(
+  () =>
+    `https://api.petfinder.com/v2/animals?type=${selected.value}&country=US&location=${location.value}&page=${count.pageCount}`
+);
+
+async function getPetData() {
+  try {
+    const res = await axios.get(petDataUrl.value, {
+      headers: { Authorization: `Bearer ${token.value}` },
+    });
+
+    let temp = res.data.animals;
+    count.totalCount = res.data.pagination.total_pages;
+
     for (let i = 0; i < temp.length; i++) {
       store.pets.push({
         age: temp[i].age,
@@ -85,7 +97,32 @@ async function getPets() {
   }
 }
 
+watch(pageCount, () => {
+  console.log("PAGE changed");
+  getPets();
+});
+
+watch(location, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    store.$reset();
+    count.pageCount = 1;
+    count.totalCount = 0;
+  }
+});
+
+watch(selected, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    store.$reset();
+    count.pageCount = 1;
+    count.totalCount = 0;
+  }
+});
+
 function clear() {
   location.value = undefined;
+  selected.value = "";
+  store.$reset();
+  count.pageCount = 1;
+  count.totalCount = 0;
 }
 </script>
