@@ -15,7 +15,7 @@
 
         <select
           aria-required="true"
-          v-model="selected"
+          v-model="animalType"
           class="w-full h-1/4 px-3 rounded bg-gray-200 md:w-[30%] md:h-full md:rounded-none"
         >
           <option disabled value="">Select Pet</option>
@@ -39,14 +39,19 @@ import { storeToRefs } from "pinia";
 import axios from "axios";
 import { usePetDataStore } from "../../stores/PetDataStore";
 import { usePageCountStore } from "../../stores/PageCountStore";
+import { useInputStore } from "../../stores/InputStore";
 import SmallButton from "../Buttons/SmallButton.vue";
 import RegularButton from "../Buttons/RegularButton.vue";
 
-const location = ref<number | undefined>(undefined);
-const selected = ref("");
+// const location = ref<number | undefined>(undefined);
+// const selected = ref("");
 const store = usePetDataStore();
 const count = usePageCountStore();
+const inputStore = useInputStore();
 const { pageCount } = storeToRefs(count);
+const { location } = storeToRefs(inputStore);
+const { animalType } = storeToRefs(inputStore);
+
 const petFinderKey = "MoeWtb2AXMkm0UpB9CZqsSN4OYVc9OdulnDB9h6AF4jZses8Gd";
 const petFinderSecret = "m35MTTkGg68TTq5S2FnKToUOdbQJIyLr508zrR9p";
 const httpToken = "https://api.petfinder.com/v2/oauth2/token";
@@ -66,7 +71,7 @@ async function getPets() {
 
 const petDataUrl = computed(
   () =>
-    `https://api.petfinder.com/v2/animals?type=${selected.value}&country=US&location=${location.value}&page=${count.pageCount}`
+    `https://api.petfinder.com/v2/animals?type=${animalType}&country=US&location=${location}&page=${count.pageCount}`
 );
 
 async function getPetData() {
@@ -76,6 +81,8 @@ async function getPetData() {
     });
 
     let temp = res.data.animals;
+    console.log("results: ", res.data);
+    console.log(temp);
     count.totalCount = res.data.pagination.total_pages;
 
     for (let i = 0; i < temp.length; i++) {
@@ -102,9 +109,9 @@ watch(pageCount, (newPageCount, prevPageCount) => {
 });
 
 watch(
-  [location, selected],
-  ([newLocation, newSelected], [prevLocation, prevSelected]) => {
-    if (newLocation !== prevLocation || newSelected !== prevSelected) {
+  [location, animalType],
+  ([newLocation, newAnimalType], [prevLocation, prevAnimalType]) => {
+    if (newLocation !== prevLocation || newAnimalType !== prevAnimalType) {
       store.$reset();
       count.$reset();
     }
