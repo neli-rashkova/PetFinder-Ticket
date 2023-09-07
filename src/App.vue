@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen bg-gray-200">
+  <div class="w-screen h-screen bg-gray-200 max-w-[1800px] mx-auto">
     <PetFinder />
   </div>
 </template>
