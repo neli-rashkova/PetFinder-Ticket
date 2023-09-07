@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white w-full h-[31.3rem] rounded">
+  <div
+    class="bg-white w-full h-[31.3rem] rounded md:w-[93%] md:h-[34rem] xl:w-[85%] xl:h-[30rem]"
+  >
     <img
       v-if="props.image?.length > 0"
       class="w-full h-[75%] rounded-t"
