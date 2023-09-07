@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-[calc(100vh-230px)] md:h-[calc(100vh-7rem)]">
+  <div class="w-full h-[calc(100vh-230px)] md:h-[calc(100vh-7rem)]">
     <div
       class="w-full h-[93%] flex flex-col justify-between items-center pt-2 gap-1 md:pt-4"
     >
@@ -16,7 +16,12 @@
         </h3>
       </div>
       <div
-        class="w-[90%] h-[90%] overflow-y-scroll grid grid-cols-1 auto-rows-auto gap-y-5 justify-items-center md:grid-cols-2 md:w-[95%] md:gap-y-4 lg:grid-cols-3 lg:gap-x-2 lg:gap-y-7 xl:grid-cols-4 xl:gap-x-0 xl:gap-y-14"
+        class="w-[90%] h-[90%] grid grid-cols-1 auto-rows-auto gap-y-5 justify-items-center md:grid-cols-2 md:w-[95%] md:gap-y-4 lg:grid-cols-3 lg:gap-x-2 lg:gap-y-7 xl:grid-cols-4 xl:gap-x-0 xl:gap-y-14"
+        :class="showScrollBar ? 'overflow-y-scroll' : 'overflow-y-hidden'"
+        @scroll="disableScrolling()"
+        @mousewheel="enableScrolling()"
+        @click="enableScrolling()"
+        @mousemove="enableScrolling()"
       >
         <PetCard
           v-for="pet in itemsOnCurrentPage"
@@ -51,11 +56,12 @@ import PetCard from "./PetCard.vue";
 import { usePetDataStore } from "../../stores/PetDataStore";
 import { usePageCountStore } from "../../stores/PageCountStore";
 import { useInputStore } from "../../stores/InputStore";
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
 const store = usePetDataStore();
 const count = usePageCountStore();
 const inputStore = useInputStore();
+const showScrollBar = ref(false);
 
 const itemsOnCurrentPage = computed(() => {
   return store.pets.filter((el) => {
@@ -67,4 +73,14 @@ const itemsOnCurrentPage = computed(() => {
     }
   });
 });
+
+function disableScrolling() {
+  setTimeout(() => {
+    showScrollBar.value = false;
+  }, 1000);
+}
+
+function enableScrolling() {
+  showScrollBar.value = true;
+}
 </script>
