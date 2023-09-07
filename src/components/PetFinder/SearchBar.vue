@@ -43,8 +43,6 @@ import { useInputStore } from "../../stores/InputStore";
 import SmallButton from "../Buttons/SmallButton.vue";
 import RegularButton from "../Buttons/RegularButton.vue";
 
-// const location = ref<number | undefined>(undefined);
-// const selected = ref("");
 const store = usePetDataStore();
 const count = usePageCountStore();
 const inputStore = useInputStore();
