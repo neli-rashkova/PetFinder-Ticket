@@ -95,9 +95,10 @@ async function getPetData() {
   }
 }
 
-watch(pageCount, () => {
-  console.log("PAGE changed", pageCount);
-  getPets();
+watch(pageCount, (newPageCount, prevPageCount) => {
+  if (newPageCount > prevPageCount) {
+    getPets();
+  }
 });
 
 watch(
@@ -105,8 +106,7 @@ watch(
   ([newLocation, newSelected], [prevLocation, prevSelected]) => {
     if (newLocation !== prevLocation || newSelected !== prevSelected) {
       store.$reset();
-      count.pageCount = 1;
-      count.totalCount = 0;
+      count.$reset();
     }
   }
 );
