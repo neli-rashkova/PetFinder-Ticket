@@ -1,7 +1,7 @@
 <template>
   <button
     @click="btnClicked"
-    class="hidden md:w-[15%] md:h-full md:bg-orange-500 md:flex md:items-center md:justify-around md:px-[6px] md:text-white xl:justify-evenly md:text-xs"
+    class="hidden md:w-[13%] md:h-full md:bg-orange-500 md:flex md:items-center md:justify-around md:text-xs md:px-[6px] md:text-white lg:w-[12%] xl:w-[10%] xl:justify-evenly"
   >
     <Icon
       icon="foundation:magnifying-glass"
