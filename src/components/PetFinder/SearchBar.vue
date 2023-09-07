@@ -7,8 +7,8 @@
         class="w-full h-full flex flex-wrap items-center justify-center md:flex-row"
       >
         <input
-          class="w-full h-1/4 px-3 rounded placeholder:uppercase md:w-[55%] md:h-full lg:w-[57%]"
-          placeholder="Enter your location zip code"
+          class="w-full h-1/4 px-3 rounded placeholder:uppercase placeholder:text-[10px] md:w-[55%] md:h-full lg:w-[57%] lg:placeholder:text-xs xl:placeholder:text-sm"
+          placeholder="Enter your American location zip code, example 10005"
           v-model="location"
           aria-required="true"
         />
