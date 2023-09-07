@@ -7,7 +7,7 @@
         class="w-full h-full flex flex-wrap items-center justify-center md:flex-row"
       >
         <input
-          class="w-full h-1/4 px-3 rounded placeholder:uppercase md:w-[55%] md:h-full"
+          class="w-full h-1/4 px-3 rounded placeholder:uppercase md:w-[55%] md:h-full lg:w-[57%]"
           placeholder="Enter your location zip code"
           v-model="location"
           aria-required="true"
@@ -16,7 +16,7 @@
         <select
           aria-required="true"
           v-model="animalType"
-          class="w-full h-1/4 px-3 rounded bg-gray-200 md:w-[30%] md:h-full md:rounded-none"
+          class="w-full h-1/4 px-3 rounded bg-gray-200 md:w-[32%] md:h-full md:rounded-none lg:w-[31%] xl:w-[33%]"
         >
           <option disabled value="">Select Pet</option>
           <option>Cat</option>
