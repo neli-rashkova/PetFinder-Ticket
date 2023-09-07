@@ -71,7 +71,7 @@ async function getPets() {
 
 const petDataUrl = computed(
   () =>
-    `https://api.petfinder.com/v2/animals?type=${animalType}&country=US&location=${location}&page=${count.pageCount}`
+    `https://api.petfinder.com/v2/animals?type=${animalType.value}&country=US&location=${location.value}&page=${count.pageCount}`
 );
 
 async function getPetData() {
@@ -103,7 +103,7 @@ async function getPetData() {
 }
 
 watch(pageCount, (newPageCount, prevPageCount) => {
-  if (newPageCount > prevPageCount) {
+  if (newPageCount > prevPageCount || newPageCount === prevPageCount) {
     getPets();
   }
 });
