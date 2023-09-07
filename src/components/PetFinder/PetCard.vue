@@ -13,7 +13,7 @@
     </div>
     <section class="w-full h-1/4 px-4 pt-3 pb-2 flex flex-col justify-around">
       <div class="flex flex-col">
-        <span class="text-lg font-semibold">{{ props.name }}</span>
+        <span class="text-lg font-semibold line-clamp-1">{{ props.name }}</span>
         <span class="text-gray-700 text-sm">{{ props.breed }}</span>
       </div>
       <div class="flex justify-between items-center">
