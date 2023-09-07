@@ -3,7 +3,9 @@
     <div
       class="absolute w-[90%] h-[90%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded md:w-3/4 md:h-[35%] md:top-24 md:p-1 md:bg-white lg:w-[55%]"
     >
-      <div class="w-full h-full flex flex-wrap items-center md:flex-row">
+      <div
+        class="w-full h-full flex flex-wrap items-center justify-center md:flex-row"
+      >
         <input
           class="w-full h-1/4 px-3 rounded placeholder:uppercase md:w-[55%] md:h-full"
           placeholder="Enter your location zip code"
@@ -23,15 +25,9 @@
           <option>Bird</option>
         </select>
 
-        <div class="w-full h-1/4 flex justify-evenly py-1 md:hidden">
-          <SmallButton label="Clear" @handleEvent="clear" />
-          <SmallButton label="Search" @handleEvent="getPets" />
-        </div>
+        <SmallButton label="Search" @handleEvent="getPets" />
 
-        <div class="hidden md:w-[15%] md:h-full md:flex gap-1">
-          <RegularButton label="Search" @handleEvent="getPets" />
-          <ClearButton label="Clear" @handle-event="clear" />
-        </div>
+        <RegularButton label="Search" @handleEvent="getPets" />
       </div>
     </div>
   </div>
@@ -45,7 +41,6 @@ import { usePetDataStore } from "../../stores/PetDataStore";
 import { usePageCountStore } from "../../stores/PageCountStore";
 import SmallButton from "../Buttons/SmallButton.vue";
 import RegularButton from "../Buttons/RegularButton.vue";
-import ClearButton from "../Buttons/ClearButton.vue";
 
 const location = ref<number | undefined>(undefined);
 const selected = ref("");
@@ -57,6 +52,7 @@ const petFinderSecret = "m35MTTkGg68TTq5S2FnKToUOdbQJIyLr508zrR9p";
 const httpToken = "https://api.petfinder.com/v2/oauth2/token";
 const key = `grant_type=client_credentials&client_id=${petFinderKey}&client_secret=${petFinderSecret}`;
 const token = ref("");
+const id = ref(0);
 
 async function getPets() {
   try {
@@ -84,6 +80,7 @@ async function getPetData() {
 
     for (let i = 0; i < temp.length; i++) {
       store.pets.push({
+        id: id.value,
         age: temp[i].age,
         gender: temp[i].gender,
         name: temp[i].name,
@@ -91,6 +88,7 @@ async function getPetData() {
         distance: temp[i].distance,
         photo: temp[i].photos[0],
       });
+      id.value++;
     }
   } catch (err) {
     console.log(err);
@@ -98,7 +96,7 @@ async function getPetData() {
 }
 
 watch(pageCount, () => {
-  console.log("PAGE changed");
+  console.log("PAGE changed", pageCount);
   getPets();
 });
 
@@ -112,12 +110,4 @@ watch(
     }
   }
 );
-
-function clear() {
-  location.value = undefined;
-  selected.value = "";
-  store.$reset();
-  count.pageCount = 1;
-  count.totalCount = 0;
-}
 </script>
