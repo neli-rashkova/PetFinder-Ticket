@@ -1,9 +1,9 @@
 <template>
   <div class="w-screen h-screen bg-gray-200 max-w-[1800px] mx-auto">
-    <PetFinder />
+    <Main />
   </div>
 </template>
 
 <script setup lang="ts">
-import PetFinder from "@/components/PetFinder/index.vue";
+import Main from "@/components/PetFinder/Main.vue";
 </script>
