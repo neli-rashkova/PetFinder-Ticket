@@ -6,6 +6,10 @@ import { action } from "@storybook/addon-actions";
 
 const meta: Meta<typeof RegularButton> = {
   component: RegularButton,
+  argTypes: {
+    label: String,
+    onClick: { action: "clicked" },
+  },
 };
 
 export default meta;
@@ -20,7 +24,7 @@ export const Button: Story = {
         onClick: action("clicked"),
       };
     },
-    template: '<RegularButton @click="onClick" :label="label" />',
+    template: '<RegularButton @click="() =>({})" :label="label" />',
   }),
   args: {
     label: "Search",
