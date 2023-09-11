@@ -1,7 +1,10 @@
 # PetFinder
 
 A one-page app that uses the PetFinder API to fetch animals(ex: Cat, Dog, Bird, Rabbit) based on American location postal code (ex: 10005) and animal type and display them on the screen.
+
 Technology used: Vue, Vite, TypeScript, TailwindCSS, and Pinia.
+
+For more information on the PetFinder API, visit https://www.petfinder.com/developers/v2/docs/#get-animal-types.
 
 ## Recommended IDE Setup
 
