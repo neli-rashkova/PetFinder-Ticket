@@ -24,7 +24,7 @@
         @mousemove="enableScrolling()"
       >
         <PetCard
-          v-for="pet in itemsOnCurrentPage"
+          v-for="pet in store.pets"
           :key="pet.id"
           :image="pet.photo?.medium"
           :name="pet.name"
@@ -56,23 +56,12 @@ import PetCard from "./PetCard.vue";
 import { usePetDataStore } from "../../stores/PetDataStore";
 import { usePageCountStore } from "../../stores/PageCountStore";
 import { useInputStore } from "../../stores/InputStore";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
 const store = usePetDataStore();
 const count = usePageCountStore();
 const inputStore = useInputStore();
 const showScrollBar = ref(false);
-
-const itemsOnCurrentPage = computed(() => {
-  return store.pets.filter((el) => {
-    if (
-      el.id >= count.pageCount * 20 - 20 &&
-      el.id <= count.pageCount * 20 - 1
-    ) {
-      return el;
-    }
-  });
-});
 
 function disableScrolling() {
   setTimeout(() => {
