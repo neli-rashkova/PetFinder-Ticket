@@ -80,9 +80,6 @@ async function getPetData() {
     });
 
     let temp = res.data.animals;
-    console.log("results: ", res.data);
-    console.log(temp);
-    console.log("Page Count:", pageCount);
     count.totalCount = res.data.pagination.total_pages;
 
     for (let i = 0; i < temp.length; i++) {
@@ -101,48 +98,43 @@ async function getPetData() {
     if (!Object.hasOwn(store.petsDataObj, [pageCount])) {
       store.petsDataObj[count.pageCount] = store.pets;
     }
-    console.log("Added Data: ", store.petsDataObj);
-    console.log("arr: ", store.pets);
   } catch (err) {
     console.log(err);
   }
 }
 
-/*if key exists, array of PetData will be displayed, if not then GetPets function is called to fetch data from API*/
-watch(pageCount, (newPageCount, prevPageCount) => {
-  store.pets = [];
-  if (newPageCount > prevPageCount) {
-    console.log("watcher triggered 2");
-    console.log("BEFORE: ", store.petsDataObj);
-
-    if (Object.hasOwn(store.petsDataObj, [newPageCount])) {
-      console.log("key exists");
-      store.petsDataObj[newPageCount].forEach((item: Pet) =>
-        store.pets.push(item)
-      );
-      console.log("After: ", store.petsDataObj);
-    } else {
-      console.log("key not exist");
-      getPets();
-    }
-  } else if (newPageCount < prevPageCount) {
-    console.log("Going to prev page:");
-    console.log(newPageCount);
-    console.log("Retreived data: ", store.petsDataObj[newPageCount]);
-    store.petsDataObj[newPageCount].forEach((item: Pet) =>
-      store.pets.push(item)
-    );
-  }
-});
-
+/* If either input changes, current  search is cleared. Else current search is not cleared.*/
 watch(
-  [location, animalType],
-  ([newLocation, newAnimalType], [prevLocation, prevAnimalType]) => {
+  [location, animalType, pageCount],
+  (
+    [newLocation, newAnimalType, newPageCount],
+    [prevLocation, prevAnimalType, prevPageCount]
+  ) => {
+    let areInputsNotChanged =
+      newLocation === prevLocation && newAnimalType === prevAnimalType;
+
     if (newLocation !== prevLocation || newAnimalType !== prevAnimalType) {
-      console.log("pets ARR: ", store.pets);
       store.$reset();
       count.$reset();
-      console.log("pets ARR: ", store.pets);
+    } else if (
+      areInputsNotChanged &&
+      Object.keys(store.petsDataObj).length > 0
+    ) {
+      store.pets = [];
+      if (newPageCount > prevPageCount) {
+        /* if key exists, array of PetData will be displayed, if not then GetPets function is called to fetch data from API*/
+        if (Object.hasOwn(store.petsDataObj, [newPageCount])) {
+          store.petsDataObj[newPageCount].forEach((item: Pet) =>
+            store.pets.push(item)
+          );
+        } else {
+          getPets();
+        }
+      } else if (newPageCount < prevPageCount) {
+        store.petsDataObj[newPageCount].forEach((item: Pet) =>
+          store.pets.push(item)
+        );
+      }
     }
   }
 );
