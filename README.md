@@ -4,7 +4,7 @@ A one-page app that uses the PetFinder API to fetch animals(ex: Cat, Dog, Bird, 
 
 Technology used: Vue, Vite, TypeScript, TailwindCSS, and Pinia.
 
-For more information on the PetFinder API, visit https://www.petfinder.com/developers/v2/docs/#get-animal-types.
+For more information on the PetFinder API, visit https://www.petfinder.com/developers/v2/docs/#api-calls.
 
 ## Recommended IDE Setup
 
