@@ -42,6 +42,7 @@ import { usePageCountStore } from "../../stores/PageCountStore";
 import { useInputStore } from "../../stores/InputStore";
 import SmallButton from "../Buttons/SmallButton.vue";
 import RegularButton from "../Buttons/RegularButton.vue";
+import type Pet from "../../stores/PetDataStore";
 
 const store = usePetDataStore();
 const count = usePageCountStore();
@@ -81,6 +82,7 @@ async function getPetData() {
     let temp = res.data.animals;
     console.log("results: ", res.data);
     console.log(temp);
+    console.log("Page Count:", pageCount);
     count.totalCount = res.data.pagination.total_pages;
 
     for (let i = 0; i < temp.length; i++) {
@@ -95,14 +97,41 @@ async function getPetData() {
       });
       id.value++;
     }
+
+    if (!Object.hasOwn(store.petsDataObj, [pageCount])) {
+      store.petsDataObj[count.pageCount] = store.pets;
+    }
+    console.log("Added Data: ", store.petsDataObj);
+    console.log("arr: ", store.pets);
   } catch (err) {
     console.log(err);
   }
 }
 
+/*if key exists, array of PetData will be displayed, if not then GetPets function is called to fetch data from API*/
 watch(pageCount, (newPageCount, prevPageCount) => {
-  if (newPageCount > prevPageCount || newPageCount === prevPageCount) {
-    getPets();
+  store.pets = [];
+  if (newPageCount > prevPageCount) {
+    console.log("watcher triggered 2");
+    console.log("BEFORE: ", store.petsDataObj);
+
+    if (Object.hasOwn(store.petsDataObj, [newPageCount])) {
+      console.log("key exists");
+      store.petsDataObj[newPageCount].forEach((item: Pet) =>
+        store.pets.push(item)
+      );
+      console.log("After: ", store.petsDataObj);
+    } else {
+      console.log("key not exist");
+      getPets();
+    }
+  } else if (newPageCount < prevPageCount) {
+    console.log("Going to prev page:");
+    console.log(newPageCount);
+    console.log("Retreived data: ", store.petsDataObj[newPageCount]);
+    store.petsDataObj[newPageCount].forEach((item: Pet) =>
+      store.pets.push(item)
+    );
   }
 });
 
@@ -110,8 +139,10 @@ watch(
   [location, animalType],
   ([newLocation, newAnimalType], [prevLocation, prevAnimalType]) => {
     if (newLocation !== prevLocation || newAnimalType !== prevAnimalType) {
+      console.log("pets ARR: ", store.pets);
       store.$reset();
       count.$reset();
+      console.log("pets ARR: ", store.pets);
     }
   }
 );
